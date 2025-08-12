@@ -1,6 +1,7 @@
 # Tetris Clone
 
 Custom made Tetris clone written in C.
+<img width="1084" height="578" alt="Tetris" src="https://github.com/user-attachments/assets/4773c94d-f0c8-46eb-922e-2929cf109b73" />
 
 ## Description
 
