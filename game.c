@@ -122,6 +122,7 @@ void increaseScore(int);
 int main() {
     SetConsoleOutputCP(CP_UTF8);
     printf("\x1b[?25l");
+    printf("\x1b[38;5;120m");
 
     startScreen();
 
