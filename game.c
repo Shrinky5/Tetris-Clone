@@ -121,6 +121,7 @@ void increaseScore(int);
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
+    printf("\x1b[?25l");
 
     startScreen();
 
@@ -321,37 +322,38 @@ void spawnShape(ShapeType type) {
 void dropShape(Shape shape, int dropCount) {
     if(dropCount == 1 && !checkCanDrop(shape)) {
         gameOver = 1;
-    } else {
-        if(checkCanDrop(shape)) {
-            DWORD start = GetTickCount();
-            while (GetTickCount() - start < pauseDuration) {
-                if (GetAsyncKeyState(KEY_LEFT) & FLAG_KEYDOWN) {
-                    moveLeftRight(&shape, LEFT);
-                }
-                if (GetAsyncKeyState(KEY_RIGHT) & FLAG_KEYDOWN) {
-                    moveLeftRight(&shape, RIGHT);
-                }
-                if(GetAsyncKeyState(KEY_DOWN) & FLAG_KEYPRESSED) {
-                    pauseDuration = FAST_DROP_SPEED;
-                }
-                else {
-                    pauseDuration = DEFAULT_DROP_SPEED;
-                }
-                if(GetAsyncKeyState(KEY_UP) & FLAG_KEYDOWN) {
-                    rotateShape(&shape);
-                }
-                Sleep(10);
-            }
+        return;
+    }
 
-            for(int i = shape.tileCount-1; i >= 0; i--) {
-                setGridCell(shape.tilesPos[i].y, shape.tilesPos[i].x, EMPTY_CELL_CHARACTER);
-                shape.tilesPos[i].y += 1;
-                setGridCell(shape.tilesPos[i].y, shape.tilesPos[i].x, TILE_CHARACTER);
-            }
-            shape.origin.y += 1;
-
-            dropShape(shape, dropCount+1);
+    DWORD start = GetTickCount();
+    while (GetTickCount() - start < pauseDuration) {
+        if (GetAsyncKeyState(KEY_LEFT) & FLAG_KEYDOWN) {
+            moveLeftRight(&shape, LEFT);
         }
+        if (GetAsyncKeyState(KEY_RIGHT) & FLAG_KEYDOWN) {
+            moveLeftRight(&shape, RIGHT);
+        }
+        if(GetAsyncKeyState(KEY_DOWN) & FLAG_KEYPRESSED) {
+            pauseDuration = FAST_DROP_SPEED;
+        }
+        else {
+            pauseDuration = DEFAULT_DROP_SPEED;
+        }
+        if(GetAsyncKeyState(KEY_UP) & FLAG_KEYDOWN) {
+            rotateShape(&shape);
+        }
+        Sleep(10);
+    }
+
+    if(checkCanDrop(shape)) {
+        for(int i = shape.tileCount-1; i >= 0; i--) {
+            setGridCell(shape.tilesPos[i].y, shape.tilesPos[i].x, EMPTY_CELL_CHARACTER);
+            shape.tilesPos[i].y += 1;
+            setGridCell(shape.tilesPos[i].y, shape.tilesPos[i].x, TILE_CHARACTER);
+        }
+        shape.origin.y += 1;
+
+        dropShape(shape, dropCount+1);
     }
 }
 
