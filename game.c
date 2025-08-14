@@ -120,6 +120,11 @@ void checkFullRows();
 void increaseScore(int);
 
 int main() {
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD dwMode = 0;
+    GetConsoleMode(hOut, &dwMode);
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hOut, dwMode);
     SetConsoleOutputCP(CP_UTF8);
     printf("\x1b[?25l");
     printf("\x1b[38;5;120m");
